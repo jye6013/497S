@@ -6,16 +6,16 @@ This microservice is responsible for handling the number of likes of existing mo
 ## APIs
 **PUT /movies/:id/likes**  
 Data format (Status 201):  
-{  
+`{  
 	"movie id" : "number of likes"  
-}  
+}`
 
 Error (Status 400):  
-"Movie ID (#) does not exist."  
+`"Movie ID (#) does not exist."`
 
 **GET /movies/:id/likes**  
 Data format (Status 201):  
-"Number of likes"  
+`"Number of likes"  `
 
 Error  (Status 400):  
-"Movie ID (#) does not exist."
+`"Movie ID (#) does not exist."`
