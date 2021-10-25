@@ -1,0 +1,23 @@
+{
+  "name": "node_api_server_1",
+  "version": "1.0.0",
+  "description": "A simple API server",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start_server": "nodemon main.js",
+    "docker_build": "docker build -t node_server_1 -f Dockerfile .",
+    "docker_build_dev": "docker build -t node_server_1_dev -f Dockerfile_dev .",
+    "docker_run": "docker run -d --rm --name my_node_server_1 -p 5000:5000 node_server_1",
+    "docker_run_dev": "./bin/run_dev.sh",
+    "docker_stop": "docker stop my_node_server_1"
+  },
+  "author": "Tim Richards",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
