@@ -7,10 +7,11 @@ app.use(express.json());
 let likesByMovieId = {"1": 1, "2": 100, "3": 10};
 
 app.get('/movies/:id/likes', (req, res) => {
-    if (!(req.params.id in likesByMovieId)) {
-        res.send("");
+    const id = req.params.id;
+    if (!(id in likesByMovieId)) {
+        res.status(400).send("Movie ID " + id + " does not exist.");
     } else {
-        res.send(likesByMovieId[req.params.id].toString());
+        res.send(likesByMovieId[id].toString());
     }
    
 });
@@ -18,7 +19,7 @@ app.get('/movies/:id/likes', (req, res) => {
 app.put('/movies/:id/likes', (req, res) => {
     const id = req.params.id;
     if (!(id in likesByMovieId)) {
-        res.send({});
+        res.status(400).send("Movie ID " + id + " does not exist.");
     } else {
         likesByMovieId[id] = likesByMovieId[id] + 1;
         res.status(201).send(likesByMovieId);
