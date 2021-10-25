@@ -4,7 +4,7 @@ By: Ji Ye
 
 This microservice is responsible for handling the number of likes of existing movies. It is able to get the number of likes or can update the number of likes for a chosen movie.
 ## APIs
-**PUT /movies/:id/likes**: Increments likes for a movie
+**PUT /movies/:id/likes**: Increments likes for a movie  
 Data format (Status 201):  
 `{  
 	"movie id" : "number of likes"  
@@ -13,7 +13,7 @@ Data format (Status 201):
 Error (Status 400):  
 `"Movie ID (#) does not exist."`
 
-**GET /movies/:id/likes**  : Gets likes for a movie
+**GET /movies/:id/likes**  : Gets likes for a movie  
 Data format (Status 201):  
 `"Number of likes"  `
 
