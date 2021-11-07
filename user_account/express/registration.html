@@ -11,14 +11,17 @@
 </head>
 <body align='center'>
         <header>
-		<h1>Login</h1>
+		<h1>Register</h1>
 	</header>
 
-	<form action="/login" method="POST">
+	<form action="/register" method="POST">
 		<fieldset>
-				
+			<label>Username</label>
+			<input type ="text" id = 'username' name="username" placeholder="rayray" required>
+			<br><br>
+
 			<label>Email ID</label>
-			<input type ="email" id = 'email' name="email" placeholder="abc@example.com" required>
+			<input type ="email" id = 'email' name="email" placeholder="hnguyenmanh@example.com" required>
 			<br><br>
 
 			<label>Password</label>
@@ -28,9 +31,8 @@
 			<button type ="reset">Reset</button>
 			<button type ="submit">Submit</button>
 		</fieldset>
-        </form>
-        <br><br>
-        <a id="mylink" href="./">register</a>
-
+	</form>
+    <a id="mylink" href="./login">login</a>
+    
 </body>
 </html>

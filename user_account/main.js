@@ -13,9 +13,14 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname,'./public')))
 
 app.get('/', function(req,res){
-  res.sendFile(path.join(__dirname+'/express/login.html'))
+  res.sendFile(path.join(__dirname+'/express/registration.html'))
   //__dirname : It will resolve to your project folder.
 })
+
+app.get('/login', function(req,res){
+    res.sendFile(path.join(__dirname+'/express/login.html'))
+    //__dirname : It will resolve to your project folder.
+  })
 
 app.post('/register', async (req, res) => {
     try{
@@ -53,9 +58,9 @@ app.post('/login', async (req, res) => {
             const passwordMatch = await bcrypt.compare(submittedPass, storedPass)
             if (passwordMatch) {
                 let usrname = foundUser.username
-                res.send(`<div align ='center'><h2>login successful</h2></div><br><br><br><div align ='center'><h3>Hello ${usrname}</h3></div><br><br><div align='center'><a href='./login.html'>logout</a></div>`)
+                res.send(`<div align ='center'><h2>login successful</h2></div><br><br><br><div align ='center'><h3>Hello ${usrname}</h3></div><br><br><div align='center'><a href='./login'>logout</a></div>`)
             } else {
-                res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align ='center'><a href='./login.html'>login again</a></div>")
+                res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align ='center'><a href='./login'>login again</a></div>")
             }
         }
         else {
