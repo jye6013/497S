@@ -5,11 +5,13 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const http = require('http')
 const bodyParser = require('body-parser')
+const axios = require('axios')
 
 const users = require('./data').userDB
 const server = http.createServer(app)
 
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname,'./public')))
 
 app.get('/', function(req,res){
@@ -24,14 +26,17 @@ app.get('/login', function(req,res){
 
 app.post('/register', async (req, res) => {
     try{
-        let foundUser = users.find((data) => req.body.email === data.email)
+        const foundUser = users.find((data) => req.body.email === data.email)
         if (!foundUser) {
     
-            let hashPassword = await bcrypt.hash(req.body.password, 10)
-    
-            let newUser = {
-                id: Date.now(),
-                username: req.body.username,
+            const hashPassword = await bcrypt.hash(req.body.password, 10)
+            const userID = Date.now()
+            const username = req.body.username
+            const email = req.body.email
+
+            const newUser = {
+                id: userID,
+                username: username,
                 email: req.body.email,
                 password: hashPassword,
             }
@@ -40,15 +45,14 @@ app.post('/register', async (req, res) => {
             await axios.post('http://localhost:5005/events', {
                 type: 'AccountCreated',
                 data: {
-                id: Date.now(),
-                username: req.body.username,
-                email: req.body.email,
-                password: hashPassword,
-                status: 'pending'
+                    id: userID,
+                    username: username,
+                    email: email,
+                    password: hashPassword,
+                    status: 'pending'
                 }
-            });
-    
-            res.status(201).send("<div align ='center'><h2>Registration successful</h2><div align='center'><a href='./'>Register another user</a></div>")
+            })
+            res.status(201).send("<div align ='center'><h2>Registration successful</h2><div align='center'><a href='./login'>Login</a><br><a href='./'>Register another user</a></div>")
         } else {
             res.status(409).send("<div align ='center'><h2>Email already used</h2></div><br><br><div align='center'><a href='./'>Use a different email</a></div>") 
         }
@@ -67,16 +71,7 @@ app.post('/login', async (req, res) => {
     
             const passwordMatch = await bcrypt.compare(submittedPass, storedPass)
             if (passwordMatch) {
-                let usrname = foundUser.username
-                await axios.post('http://localhost:5005/events', {
-                type: 'AccountCreated',
-                data: {
-                username: foundUser.username,
-                email: foundUser.email,
-                password: foundUser.password,
-                status: 'pending'
-                }
-            }); 
+                let usrname = foundUser.username 
                 res.send(`<div align ='center'><h2>login successful</h2></div><br><br><br><div align ='center'><h3>Hello ${usrname}</h3></div><br><br><div align='center'><a href='./login'>logout</a></div>`)
             } else {
                 res.send("<div align ='center'><h2>Invalid email or password</h2></div><br><br><div align ='center'><a href='./login'>login again</a></div>")
@@ -95,11 +90,9 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/events', (req, res) => {
-    console.log('Event Received:', req.body.type);
-  
-    res.send({});
-  });
-  
+    console.log('Event Received:', req.body.type)
+    res.send({})
+  })
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Example app listening at http://localhost:${port}`)
