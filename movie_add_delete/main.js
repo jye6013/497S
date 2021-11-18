@@ -69,10 +69,33 @@ app.delete('/movies/:id/delete', async (req, res) => {
 
 app.post("/events", (req, res) => {
     console.log("Received Event", req.body.type);
+    const { type, data } = req.body;
+
+    if (type == 'AllMovies') {
+        console.log(data)
+        for (const { id, movie_id, title, description } of data) {
+            if  (!movie_list[id]) {
+                movie_list[id] = [];
+            }
+            movie_list[id].push({
+                movie_id, 
+                title, 
+                description
+            });
+        }
+    }
     res.send({});
 })
 
+async function initOnBoot() {
+    await axios.post("http://localhost:6000/events", {
+      type: "GetMovies",
+      data: {},
+    });
+  }
+
 app.listen(port, '0.0.0.0', () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Example app listening at http://localhost:${port}`);
+    initOnBoot();
 })
 
