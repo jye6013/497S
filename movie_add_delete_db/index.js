@@ -40,6 +40,15 @@ app.post("/events", async (req, res) => {
         await client.query(text, values);
     }
 
+    if (type === "GetMovies") {
+        const text = 'select * from userlist';
+        const result = await client.query(text);
+
+        await axios.post("http://localhost:5000/events", {
+            type: "AllMovies",
+            data: result.rows,
+        });
+    }
     res.send({});
 });
 
