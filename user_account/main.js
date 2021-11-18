@@ -7,8 +7,8 @@ const http = require('http')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 
-const users = require('./data').userDB
-const server = http.createServer(app)
+const users = require('../user_account_db/data.js').userDB
+// const server = http.createServer(app)
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
