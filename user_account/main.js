@@ -8,18 +8,17 @@ const bodyParser = require('body-parser')
 const axios = require('axios')
 
 const users = require('../user_account_db/data.js').userDB
-// const server = http.createServer(app)
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname,'./public')))
 
-app.get('/', function(req,res){
+app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/express/registration.html'))
   //__dirname : It will resolve to your project folder.
 })
 
-app.get('/login', function(req,res){
+app.get('/login', function(req, res){
     res.sendFile(path.join(__dirname+'/express/login.html'))
     //__dirname : It will resolve to your project folder.
   })
@@ -36,6 +35,7 @@ app.post('/register', async (req, res) => {
 
             const newUser = {
                 id: userID,
+
                 username: username,
                 email: req.body.email,
                 password: hashPassword,
