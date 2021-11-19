@@ -26,13 +26,13 @@ app.post("/events", async (req, res) => {
 
     if (type === "MovieLiked") {
         const { id, likes } = data;
-        const text = 'update movie_likes set likes =$2, where id =$1'
+        const text = 'update movie_likes set likes = ($2) where id = ($1);'
         const values = [id, likes]
         await client.query(text, values);
     }
 
     if (type === "GetMovieLikes") {
-        const text = 'select * from movie_likes'
+        const text = 'select * from movie_likes;'
         const result = await client.query(text);
 
         await axios.post("http://localhost:5005/events", {

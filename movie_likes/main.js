@@ -9,7 +9,7 @@ app.use(cors())
 const port = 5001
  
 let likesByMovieId = {};
-//let likesByMovieId = {"1": 1, "2": 100, "3": 10};
+//let likesByMovieId = {"1": ["1", 1], "2": ["2", 100], "3": ["3", 10]};
  
 app.get('/movies/:id/likes', (req, res) => {
     const id = req.params.id;
@@ -17,35 +17,29 @@ app.get('/movies/:id/likes', (req, res) => {
    if (!(id in likesByMovieId)) {
     res.status(400).send("Movie ID " + id + " does not exist.");
    } else {
-    res.send(likesByMovieId[id].toString());
+    res.send(likesByMovieId[id].likes.toString());
    }
 });
 
 app.put('/movies/:id/likes', async (req, res) => {
     const id = req.params.id;
-    var likes;
-    
+
     if (!(id in likesByMovieId)) {
         res.status(400).send("Movie ID " + id + " does not exist.");
         exit();
     } else {
-        likes = likesByMovieId[id].likes + 1;
-
-        likesByMovieId[id] = {
-            id,
-            likes
-        };
-    }
+        const likes = likesByMovieId[id].likes + 1;
+        likesByMovieId[id].likes = likes;
  
-    await axios.post("http://localhost:5005/events", {
-        type: "MovieLiked",
-        data: {
-            id,
-            likes
-        },
-    });
- 
-    res.status(201).send(likesByMovieId[id]);
+        await axios.post("http://localhost:5005/events", {
+            type: "MovieLiked",
+            data: {
+                id: id,
+                likes: likes
+            },
+        });
+        res.status(201).send(likesByMovieId[id]);
+    } 
 })
  
 app.post('/events', (req, res) => {
@@ -56,8 +50,8 @@ app.post('/events', (req, res) => {
     if (type == 'AllMovieLikes') {
         for (const {id, likes} of data) {
             likesByMovieId[id] = {
-                id,
-                likes
+                id: id,
+                likes: likes
             }
         }
     }
