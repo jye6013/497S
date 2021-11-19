@@ -19,3 +19,12 @@ Data format (Status 201):
 
 Error  (Status 400):  
 `"Movie ID (#) does not exist."`
+
+## Events Generated
+**GetMovieLikes**
+
+ - Creates event to receive data for movie likes
+
+**MovieLiked**
+
+ - Creates event to alter data for movie likes
