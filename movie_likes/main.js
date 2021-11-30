@@ -20,7 +20,7 @@ app.get('/movies/:id/likes', (req, res) => {
    }
 });
 
-app.put('/movies/:id/likes', async (req, res) => {
+app.put('/movies/:id/like', async (req, res) => {
     const id = req.params.id;
 
     if (!(id in likesByMovieId)) {
@@ -41,6 +41,30 @@ app.put('/movies/:id/likes', async (req, res) => {
     } 
 })
  
+app.put('/movies/:id/unlike', async (req, res) => {
+    const id = req.params.id;
+
+    if (!(id in likesByMovieId)) {
+        res.status(400).send("Movie ID " + id + " does not exist.");
+        exit();
+    } else if (likesByMovieId[id].likes == 0) {
+        res.status(400).send("Movie likes for ID " + id + " cannnot go below 0.");
+        exit();
+    } else {
+        const likes = likesByMovieId[id].likes - 1;
+        likesByMovieId[id].likes = likes;
+ 
+        await axios.post("http://localhost:5005/events", {
+            type: "MovieUnliked",
+            data: {
+                id: id,
+                likes: likes
+            },
+        });
+        res.status(201).send(likesByMovieId[id]);
+    } 
+})
+
 app.post('/events', (req, res) => {
     console.log('Event Received:', req.body.type);
  
