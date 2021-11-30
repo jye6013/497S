@@ -8,31 +8,34 @@ module.exports = { userDB }
 const app = express()
 app.use(express.json())
 
-// const client = new Client({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'postgres',
-//     password: 'postgres',
-//     port: 5003,
-// })
+const client = new Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'postgres',
+    password: '123456',
+    port: 5432,
+});
 
-// client.connect()
+// Connect to the database
+client.connect();
 
 app.post("/events", async (req, res) => {
-    console.log("[posts-db] Received Event: ", req.body.type)
+    console.log("[accountlist-db] Received Event: ", req.body.type)
 
     const { type, data } = req.body
 
-    // If there is a PostCreated event, insert it into the database.
+    // If there is a AccountCreated event, insert it into the database.
     if (type === "AccountCreated") {
         console.log('Okay gurl')
+        const { id, username, email, password } = data
+        const text = 'INSERT INTO account_list_by_ray (id, username, email, password) values ($1, $2, $3, $4);'
+        const values = [id, username, email, password]
+        await client.query(text, values)
     }
-
-    // If there is a PostsOnBoot event, query the database for all
     // posts and post a PostsInit event with all the posts as the data.
     res.send({});
 })
 
-const server = app.listen(8000, () => {
-    console.log("[posts-db] Listening on 8000");
+app.listen(7000, () => {
+    console.log("[accountlist-db] Listening on 7000");
 });
