@@ -9,7 +9,6 @@ app.use(cors())
 const port = 5001
  
 let likesByMovieId = {};
-//let likesByMovieId = {"1": ["1", 1], "2": ["2", 100], "3": ["3", 10]};
  
 app.get('/movies/:id/likes', (req, res) => {
     const id = req.params.id;
@@ -61,7 +60,7 @@ app.post('/events', (req, res) => {
 
 
 async function initOnBoot() {
-    await axios.post("http://localhost:4005/events", {
+    await axios.post("http://localhost:5005/events", {
         type: "GetMovieLikes",
         data: {},
     });
