@@ -68,11 +68,10 @@ app.delete('/movies/:id/delete', async (req, res) => {
 })
 
 app.post("/events", (req, res) => {
-    console.log("Received Event", req.body.type);
+    console.log("Received Event ", req.body.type);
     const { type, data } = req.body;
 
     if (type == 'AllMovies') {
-        console.log(data)
         for (const { id, movie_id, title, description } of data) {
             if  (!movie_list[id]) {
                 movie_list[id] = [];
